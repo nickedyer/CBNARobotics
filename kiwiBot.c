@@ -7,7 +7,7 @@
 /************************************/
 /*  Nicholas Dyer                   */
 /*  KiwiBot Code                    */
-/*  Version 0.2                     */
+/*  Version 0.3                     */
 /*  Last Worked: 11/29/18           */
 /************************************/
 
@@ -32,9 +32,9 @@ float phi;
 float rValue;
 
 //Define Angle Constants
-float topAngle = degreesToRadians(90);
-float backLeftAngle = degreesToRadians(210);
-float backRightAngle = degreesToRadians(330);
+float topAngle = (90*3.14159265358979)/180;
+float backLeftAngle = (210*3.14159265358979)/180;
+float backRightAngle = (330*3.14159265358979)/180;
 
 void getController() //Update all Joystick and Button Variables
 {
@@ -50,8 +50,8 @@ void getController() //Update all Joystick and Button Variables
 void handleTranslate() //Handle Translate Driving
 {
 	//Set Up Variables for Polar Coordinates
-	phi = atan2(joyRightX, joyRightY);
-	rValue = sqrt((pow(joyRightY,2))+(pow(joyRightX,2)));
+	phi = atan2(joyRightY, joyRightX);
+	rValue = sqrt((joyRightX*joyRightX)+(joyRightY*joyRightY));
 
 	//Set the Value of the Motors
 	frontMotorValue = sin(topAngle-phi)*rValue;
@@ -75,17 +75,11 @@ void handleSpin() //Handle Spinning
 		backRightMotorValue = 127;
 		backLeftMotorValue = 127;
 	}
-	else if (leftBumper == 1) //If the Left Bumper is Pressed
+	if (leftBumper == 1) //If the Left Bumper is Pressed
 	{
 		frontMotorValue = -127; //Spin Counter-Clockwise
 		backRightMotorValue = -127;
 		backLeftMotorValue = -127;
-	}
-	else //If Neither are Pressed
-	{
-		frontMotorValue = frontMotorValue; //Keep the Motors the Same
-		backRightMotorValue = backRightMotorValue;
-		backLeftMotorValue = backRightMotorValue;
 	}
 }
 
@@ -102,7 +96,7 @@ task main()
 	while(1==1) //Main Loop
 	{
 		getController();
-		handleArcade();
+		//handleArcade();
 		handleTranslate();
 		handleSpin();
 		pushMotorValues();
