@@ -9,8 +9,8 @@
 /**************************************************************************/
 /*	Nicholas Dyer																													*/
 /*	CBNA Robotics 2018-2019																								*/
-/*	Launcher Program Version 0.1																					*/
-/*	Last Worked 11/26/2018																								*/
+/*	Launcher Program Version 0.2																					*/
+/*	Last Worked 11/30/2018																								*/
 /**************************************************************************/
 
 //Set Constants
@@ -31,15 +31,11 @@ int leftRight;
 float joyRight;
 float joyLeft;
 
-//Define Sensor Values
-int pulleyLimit;
-
 //Define Motor Value Variables
 int flyValue;
 int leftDriveValue;
 int rightDriveValue;
 int conveyorValue;
-int pulleyValue;
 
 void handleControl()
 {
@@ -56,12 +52,6 @@ void handleControl()
 
 	joyLeft = vexRT[Ch3];
 	joyRight = vexRT[Ch2];
-}
-
-void handleSensors()
-{
-	//Set Sensor Values to Variables
-	pulleyLimit = SensorValue[lSwitch];
 }
 
 void handleTank()
@@ -100,12 +90,12 @@ void handleFlywheel() //Flywheel Control
 	}
 	if (leftLeft == 1 && time1[T1] > 500)	//If the left left button is pressed
 	{																			//and has not been pressed in the
-		flyValue = flyValue-32;							//last 30 milliseconds, decrease the flywheel
+		flyValue = flyValue-22;							//last 30 milliseconds, decrease the flywheel
 		clearTimer(T1);											//speed by 32.
 	}
 	if (leftRight == 1 && time1[T1] > 500)//If the left right button is pressed
 	{																			//and has not been pressed in the
-		flyValue = flyValue+32;							//last 30 milliseconds, increase the flywheel
+		flyValue = flyValue+22;							//last 30 milliseconds, increase the flywheel
 		clearTimer(T1);											//speed by 32.
 	}
 	if (flyValue < 0) //If the flywheel value is set below zero, force the value to zero.
@@ -130,38 +120,10 @@ void handleConveyor()
 	}
 }
 
-void handlePulley()
-{
-	if (leftBumpUp == 1)
-	{
-		pulleyValue = pulleySpeed; //If the left up bumper is pressed, make the pulley go up
-	}
-	else if (leftBumpDown == 1)
-	{
-		pulleyValue = -pulleySpeed; //If the left up bumper is pressed, make the pulley go down
-	}
-	else
-	{
-		pulleyValue = 0; //If nothing is pressed, turn off the pulley
-	}
-}
-
-void pulleyLimitControl()
-{
-	if (pulleyLimit == 1)
-	{
-		if (pulleyValue > 0) //If the limit switch is pressed and the pulley is going up, stop it
-		{
-			pulleyValue = 0;
-		}
-	}
-}
-
 void handleMotor() //Set motors to their values
 {
 	motor[conveyor] = conveyorValue;
 	motor[flywheel] = flyValue;
-	motor[ballLift] = pulleyValue;
 	motor[leftDrive] = leftDriveValue;
 	motor[rightDrive] = rightDriveValue;
 }
@@ -171,12 +133,9 @@ task main()
 	while(1==1) //Main Loop
 	{
 		handleControl();
-		handleSensors();
 		handleTank();
 		handleFlywheel();
 		handleConveyor();
-		handlePulley();
-		pulleyLimitControl();
 		handleMotor();
 	}
 }
