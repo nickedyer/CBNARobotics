@@ -5,32 +5,38 @@
 
 
 /************************************/
-/*	Nicholas Dyer										*/
-/*	KiwiBot Code										*/
-/*	Version 0.1											*/
-/*	Last Worked: 11/29/18						*/
+/*  Nicholas Dyer                   */
+/*  KiwiBot Code                    */
+/*  Version 0.2                     */
+/*  Last Worked: 11/29/18           */
 /************************************/
 
+
+//Define Joystick Variables
 float joyRightX;
 float joyRightY;
 float joyLeftX;
 float joyLeftY;
 
+//Define Button Variables
 int rightBumper;
 int leftBumper;
 
+//Define Motor Value Variables
 int frontMotorValue;
 int backLeftMotorValue;
 int backRightMotorValue;
 
+//Define Variables for Polar Vectors
 float phi;
 float rValue;
 
+//Define Angle Constants
 float topAngle = degreesToRadians(90);
 float backLeftAngle = degreesToRadians(210);
 float backRightAngle = degreesToRadians(330);
 
-void getController()
+void getController() //Update all Joystick and Button Variables
 {
 	joyRightX = vexRT[Ch1];
 	joyRightY = vexRT[Ch2];
@@ -41,46 +47,49 @@ void getController()
 	leftBumper = vexRT[Btn5U];
 }
 
-void handleTranslate()
+void handleTranslate() //Handle Translate Driving
 {
+	//Set Up Variables for Polar Coordinates
 	phi = atan2(joyRightX, joyRightY);
 	rValue = sqrt((pow(joyRightY,2))+(pow(joyRightX,2)));
 
+	//Set the Value of the Motors
 	frontMotorValue = sin(topAngle-phi)*rValue;
 	backLeftMotorValue = sin(backLeftAngle-phi)*rValue;
 	backRightMotorValue = sin(backRightAngle-phi)*rValue;
 }
 
-void handleArcade()
+void handleArcade() //Handle Arcade Driving
 {
-	frontMotorValue = joyLeftX;
-	backRightMotorValue = joyLeftY;
+	//Set the Motors to a Simple Arcade Mode
+	frontMotorValue = joyLeftX; //Front Wheel for Left and Right
+	backRightMotorValue = joyLeftY; //Back Two Wheels for Forward and Backwards
 	backRightMotorValue = -joyLeftY;
 }
 
-void handleSpin()
+void handleSpin() //Handle Spinning
 {
-	if (rightBumper == 1)
+	if (rightBumper == 1) //If the Right Bumper is Pressed
 	{
-		frontMotorValue = 127;
+		frontMotorValue = 127; //Spin Clockwise
 		backRightMotorValue = 127;
-		backRightMotorValue = 127;
+		backLeftMotorValue = 127;
 	}
-	else if (leftBumper == 1)
+	else if (leftBumper == 1) //If the Left Bumper is Pressed
 	{
-		frontMotorValue = -127;
+		frontMotorValue = -127; //Spin Counter-Clockwise
 		backRightMotorValue = -127;
-		backRightMotorValue = -127;
+		backLeftMotorValue = -127;
 	}
-	else
+	else //If Neither are Pressed
 	{
-		frontMotorValue = frontMotorValue;
+		frontMotorValue = frontMotorValue; //Keep the Motors the Same
 		backRightMotorValue = backRightMotorValue;
-		backRightMotorValue = backRightMotorValue;
+		backLeftMotorValue = backRightMotorValue;
 	}
 }
 
-void pushMotorValues()
+void pushMotorValues() //Set the Motors to their Values
 {
 	motor[frontMotor] = frontMotorValue;
 	motor[backLeftMotor] = backLeftMotorValue;
@@ -90,7 +99,7 @@ void pushMotorValues()
 
 task main()
 {
-	while(1==1)
+	while(1==1) //Main Loop
 	{
 		getController();
 		handleArcade();
