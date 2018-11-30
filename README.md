@@ -7,11 +7,12 @@ Ursa Major
 99212
 
 The members include:
-  Cordelia Norris
-  Alasdair Morrison
-  Emily Buehne
-  Noah Sinnamon
-  Ruby Carr
-  Austin Carrier
+  Cordelia Norris,
+  Alasdair Morrison,
+  Nicholas Dyer,
+  Noah Sinnamon,
+  Emily Buehne,
+  Ruby Carr,
+  Alice Ewing,
+  Austin Carrier,
   Evan Chauvey
-  Nicholas Dyer
