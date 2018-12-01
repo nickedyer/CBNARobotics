@@ -13,7 +13,7 @@
 /**************************************************************************/
 /*	Nicholas Dyer																													*/
 /*	CBNA Robotics 2018-2019																								*/
-/*	Launcher Program Version 0.3																					*/
+/*	Launcher Program Version 0.4																					*/
 /*	Last Worked 11/30/2018																								*/
 /**************************************************************************/
 
@@ -21,7 +21,7 @@
 int deadzoneValue = 20;
 int drivePower = 100;
 int conveyorSpeed = 127;
-int leftDrivePower = 100;
+int leftDrivePower = 80;
 int rightDrivePower = 100;
 
 //Define Controller Variables
@@ -140,7 +140,27 @@ void handleMotor() //Set motors to their values
 
 task autonomous() //Autonomous Mode
 {
-  AutonomousCodePlaceholderForTesting(); //We have no idea what we're doings
+  flyValue = 127;
+  handleMotor();
+  sleep(2000); //Turn the flywheel on and wait 2 seconds
+  leftDriveValue = 127;
+  rightDriveValue = 127;
+  handleMotor();
+  sleep(850); //Drive forward for 0.85 seconds
+  leftDriveValue = 0;
+  rightDriveValue = 0;
+  conveyorValue = 127;
+  handleMotor();
+  sleep(5000); //Stop and turn on the conveyor for 5 seconds
+  conveyorValue = 0;
+  flyValue = 0;
+  leftDriveValue = 110;
+  rightDriveValue = 127;
+  handleMotor();
+  sleep(1500); //Turn off the flywheel and conveyor and drive slightly left
+  leftDriveValue = 0;
+  rightDriveValue = 0;
+  handleMotor(); //Stop
 }
 
 task usercontrol() //User Control Mode
